@@ -275,3 +275,31 @@ void bsp_curtain_factory_reset(void)
     uint8_t len = curtain_build_ctrl_cmd(CURTAIN_CMD_RESET, buf);
     curtain_send_frame(buf, len);
 }
+
+/**
+ * @brief       写设备地址 (广播方式)
+ * @param       addr_h: 新地址高字节
+ * @param       addr_l: 新地址低字节
+ * @note        帧: 55 00 00 02 00 02 addr_h addr_l CRC
+ *              需先按住电机设置键5秒进入分配模式
+ */
+void bsp_curtain_set_address(uint8_t addr_h, uint8_t addr_l)
+{
+    uint8_t buf[10];
+    uint16_t crc;
+
+    buf[0] = 0x55;
+    buf[1] = 0x00;              /* 广播地址 */
+    buf[2] = 0x00;
+    buf[3] = CURTAIN_FUNC_WRITE; /* 功能码: 写 */
+    buf[4] = 0x00;              /* 数据地址: 寄存器0x00 */
+    buf[5] = 0x02;              /* 数据长度: 2字节 */
+    buf[6] = addr_h;            /* 新地址高字节 */
+    buf[7] = addr_l;            /* 新地址低字节 */
+
+    crc = curtain_crc16(buf, 8);
+    buf[8] = crc & 0xFF;
+    buf[9] = (crc >> 8) & 0xFF;
+
+    curtain_send_frame(buf, 10);
+}

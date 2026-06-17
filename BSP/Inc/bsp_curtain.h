@@ -75,5 +75,6 @@ void bsp_curtain_query_position(void);
 void bsp_curtain_query_status(void);
 void bsp_curtain_del_travel(void);
 void bsp_curtain_factory_reset(void);
+void bsp_curtain_set_address(uint8_t addr_h, uint8_t addr_l);
 
 #endif
