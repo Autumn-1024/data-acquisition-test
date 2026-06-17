@@ -119,30 +119,30 @@ static void menu_draw_status(void)
  * @brief       处理主菜单按�? * @param       key: 按键�? */
 static void menu_handle_main(uint8_t key)
 {
-    if (key == KEY1_PRES)       /* 下移 */
-    {
-        if (cur_index < MENU_MAX - 1)
-        {
-            cur_index++;
-            need_refresh = 1;
-            printf("[KEY1] Cursor -> %s\r\n", menu_items[cur_index]);
-        }
-        else
-        {
-            printf("[KEY1] Already at bottom\r\n");
-        }
-    }
-    else if (key == KEY2_PRES)  /* 上移 */
+    if (key == KEY1_PRES)       /* 上移 */
     {
         if (cur_index > 0)
         {
             cur_index--;
             need_refresh = 1;
+            printf("[KEY1] Cursor -> %s\r\n", menu_items[cur_index]);
+        }
+        else
+        {
+            printf("[KEY1] Already at top\r\n");
+        }
+    }
+    else if (key == KEY2_PRES)  /* 下移 */
+    {
+        if (cur_index < MENU_MAX - 1)
+        {
+            cur_index++;
+            need_refresh = 1;
             printf("[KEY2] Cursor -> %s\r\n", menu_items[cur_index]);
         }
         else
         {
-            printf("[KEY2] Already at top\r\n");
+            printf("[KEY2] Already at bottom\r\n");
         }
     }
     else if (key == KEY3_PRES)  /* 确认 */
