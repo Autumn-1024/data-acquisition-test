@@ -16,7 +16,7 @@
 
 #include "app_web.h"
 #include "bsp_esp01s.h"
-#include "bsp_curtain.h"
+#include "bsp_rs485.h"
 #include "bsp_oled.h"
 #include <stdio.h>
 #include <string.h>
@@ -29,10 +29,20 @@
 #define WEB_PORT        80
 
 /******************************************************************************************/
-/* 窗帘地址表 */
+/* 预计算窗帘控制帧 (地址+开/关) */
 
-static const uint8_t curtain_addr_h[4] = { 0x02, 0x02, 0x02, 0x02 };
-static const uint8_t curtain_addr_l[4] = { 0x01, 0x02, 0x03, 0x04 };
+static const uint8_t curtain_frames[][7] = {
+    /* C1 0x0201 */ {0x55,0x02,0x01,0x03,0x01,0xB9,0x44}, /* open  */
+    /* C1 0x0201 */ {0x55,0x02,0x01,0x03,0x02,0xF9,0x45}, /* close */
+    /* C2 0x0202 */ {0x55,0x02,0x02,0x03,0x01,0x49,0x44}, /* open  */
+    /* C2 0x0202 */ {0x55,0x02,0x02,0x03,0x02,0x09,0x45}, /* close */
+    /* C3 0x0203 */ {0x55,0x02,0x03,0x03,0x01,0x18,0x84}, /* open  */
+    /* C3 0x0203 */ {0x55,0x02,0x03,0x03,0x02,0x58,0x85}, /* close */
+    /* C4 0x0204 */ {0x55,0x02,0x04,0x03,0x01,0xA9,0x45}, /* open  */
+    /* C4 0x0204 */ {0x55,0x02,0x04,0x03,0x02,0xE9,0x44}, /* close */
+};
+#define FRAME_OPEN(c)   (curtain_frames[(c)*2])
+#define FRAME_CLOSE(c)  (curtain_frames[(c)*2+1])
 
 /******************************************************************************************/
 /* HTML页面 (存储在Flash中) */
@@ -107,50 +117,39 @@ static void on_http_request(uint8_t link_id, const char *method, const char *pat
 
     printf("[WEB] %d %s %s\r\n", link_id, method, path);
 
-    /* 解析窗帘控制命令 */
-    if (strncmp(path, "/c", 2) == 0 && strlen(path) >= 4)
+    /* 窗帘控制: /c1/open /c1/close /c2/open ... */
+    if (path[0] == '/' && path[1] == 'c' && path[3] == '/')
     {
         uint8_t idx = path[2] - '1';  /* 0~3 */
         const char *action = path + 4;
 
         if (idx < 4)
         {
-            /* 设置目标窗帘地址 */
-            g_curtain_use_custom = 1;
-            g_curtain_custom_addr_h = curtain_addr_h[idx];
-            g_curtain_custom_addr_l = curtain_addr_l[idx];
+            const uint8_t *frame = NULL;
 
-            if (strcmp(action, "/open") == 0)
+            if (action[0] == 'o' && action[1] == 'p')  /* open */
             {
-                bsp_curtain_open();
-                snprintf(msg, sizeof(msg), "C%d OPEN sent", idx + 1);
-                printf("[WEB] -> Curtain %d OPEN (0x%02X%02X)\r\n",
-                       idx + 1, curtain_addr_h[idx], curtain_addr_l[idx]);
+                frame = FRAME_OPEN(idx);
+                snprintf(msg, sizeof(msg), "C%d OPEN OK", idx + 1);
             }
-            else if (strcmp(action, "/close") == 0)
+            else if (action[0] == 'c')  /* close */
             {
-                bsp_curtain_close();
-                snprintf(msg, sizeof(msg), "C%d CLOSE sent", idx + 1);
-                printf("[WEB] -> Curtain %d CLOSE (0x%02X%02X)\r\n",
-                       idx + 1, curtain_addr_h[idx], curtain_addr_l[idx]);
-            }
-            else if (strcmp(action, "/stop") == 0)
-            {
-                bsp_curtain_stop();
-                snprintf(msg, sizeof(msg), "C%d STOP sent", idx + 1);
-            }
-            else
-            {
-                snprintf(msg, sizeof(msg), "Unknown action");
+                frame = FRAME_CLOSE(idx);
+                snprintf(msg, sizeof(msg), "C%d CLOSE OK", idx + 1);
             }
 
-            bsp_esp01s_send_response(link_id, http_200_text, msg);
-            return;
+            if (frame)
+            {
+                printf("[WEB] -> C%d %s\r\n", idx + 1, action);
+                bsp_rs485_send_data((uint8_t *)frame, 7);
+                bsp_esp01s_send_response(link_id, http_200_text, msg);
+                return;
+            }
         }
     }
 
     /* 首页 */
-    if (strcmp(path, "/") == 0 || strcmp(path, "/index.html") == 0)
+    if (path[0] == '/' && path[1] == '\0')
     {
         bsp_esp01s_send_response(link_id, http_200_header, html_page);
         return;
