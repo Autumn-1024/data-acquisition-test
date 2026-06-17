@@ -171,6 +171,38 @@ static uint8_t esp_wait_for(const char *target, uint16_t timeout_ms)
 }
 
 /**
+ * @brief       等待指定字符串之一 (带超时)
+ * @param       t1, t2: 目标字符串
+ * @param       timeout_ms: 超时时间
+ * @retval      1=找到t1, 2=找到t2, 0=超时
+ */
+static uint8_t esp_wait_for_either(const char *t1, const char *t2, uint16_t timeout_ms)
+{
+    uint16_t p1 = 0, p2 = 0;
+    uint16_t elapsed = 0;
+    uint16_t l1 = strlen(t1), l2 = strlen(t2);
+
+    while (elapsed < timeout_ms)
+    {
+        int16_t ch = esp_read_byte();
+        if (ch >= 0)
+        {
+            if (ch == t1[p1]) { p1++; if (p1 >= l1) return 1; }
+            else p1 = (ch == t1[0]) ? 1 : 0;
+
+            if (ch == t2[p2]) { p2++; if (p2 >= l2) return 2; }
+            else p2 = (ch == t2[0]) ? 1 : 0;
+        }
+        else
+        {
+            HAL_Delay(1);
+            elapsed++;
+        }
+    }
+    return 0;
+}
+
+/**
  * @brief       发送AT指令并等待OK
  * @param       cmd: AT指令
  * @param       timeout_ms: 超时时间
@@ -192,15 +224,24 @@ static uint8_t esp_send_at(const char *cmd, uint16_t timeout_ms)
 void bsp_esp01s_init(void)
 {
     esp_uart_init();
-    HAL_Delay(1000);
+    HAL_Delay(2000);  /* 等待ESP01S启动 */
 
-    /* 测试AT通信 */
-    esp_send_at("AT\r\n", 2000);
-    HAL_Delay(100);
+    /* 多次测试AT通信 */
+    uint8_t i;
+    for (i = 0; i < 5; i++)
+    {
+        if (esp_send_at("AT\r\n", 2000)) break;
+        HAL_Delay(500);
+    }
+    HAL_Delay(200);
 
     /* 关闭回显 */
     esp_send_at("ATE0\r\n", 2000);
-    HAL_Delay(100);
+    HAL_Delay(200);
+
+    /* 查询版本 (调试) */
+    esp_send_at("AT+GMR\r\n", 3000);
+    HAL_Delay(200);
 }
 
 /**
@@ -213,9 +254,17 @@ uint8_t bsp_esp01s_connect_wifi(const char *ssid, const char *password)
 {
     char cmd[128];
 
+    /* 查询当前WiFi状态 */
+    esp_send_at("AT+CWMODE?\r\n", 2000);
+    HAL_Delay(200);
+
     /* 设置Station模式 */
     if (!esp_send_at("AT+CWMODE=1\r\n", 3000))
         return 0;
+    HAL_Delay(500);
+
+    /* 断开之前的连接 */
+    esp_send_at("AT+CWQAP\r\n", 3000);
     HAL_Delay(500);
 
     /* 连接WiFi */
@@ -223,11 +272,19 @@ uint8_t bsp_esp01s_connect_wifi(const char *ssid, const char *password)
     esp_flush_rx();
     esp_send_cmd(cmd);
 
-    /* 等待连接成功 (最多15秒) */
-    if (!esp_wait_for("OK", 15000))
+    /* 等待连接结果 (最多20秒) */
+    uint8_t result = esp_wait_for_either("OK", "FAIL", 20000);
+    if (result != 1)
         return 0;
 
+    /* 等待获取IP */
+    HAL_Delay(3000);
+
+    /* 查询WiFi状态确认 */
+    esp_flush_rx();
+    esp_send_cmd("AT+CWJAP?\r\n");
     HAL_Delay(1000);
+
     return 1;
 }
 
@@ -240,17 +297,33 @@ uint8_t bsp_esp01s_start_server(uint16_t port)
 {
     char cmd[64];
 
-    /* 设置多连接模式 */
-    if (!esp_send_at("AT+CIPMUX=1\r\n", 3000))
-        return 0;
+    /* 设置单连接模式 (简化处理) */
+    esp_send_at("AT+CIPMUX=0\r\n", 3000);
+    HAL_Delay(500);
+
+    /* 设置透传模式 */
+    esp_send_at("AT+CIPMODE=0\r\n", 3000);
     HAL_Delay(200);
 
-    /* 启动TCP服务器 */
+    /* 启动TCP服务器 (单连接模式下不需要CIPSERVER) */
+    /* 改用多连接模式 */
+    esp_send_at("AT+CIPMUX=1\r\n", 3000);
+    HAL_Delay(500);
+
     snprintf(cmd, sizeof(cmd), "AT+CIPSERVER=1,%d\r\n", port);
     if (!esp_send_at(cmd, 5000))
-        return 0;
+    {
+        /* 如果失败, 尝试先关闭再开启 */
+        esp_send_at("AT+CIPSERVER=0\r\n", 3000);
+        HAL_Delay(500);
+        if (!esp_send_at(cmd, 5000))
+            return 0;
+    }
 
+    /* 设置服务器超时 */
+    esp_send_at("AT+CIPSTO=120\r\n", 3000);
     HAL_Delay(500);
+
     return 1;
 }
 
