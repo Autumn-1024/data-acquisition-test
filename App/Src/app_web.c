@@ -25,7 +25,7 @@
 /* WiFi配置 */
 
 #define WIFI_SSID       "Xiaomi15 By Autumn"
-#define WIFI_PASS       "ds12345678"
+#define WIFI_PASS       "........"
 #define WEB_PORT        80
 
 /******************************************************************************************/
