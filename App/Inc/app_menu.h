@@ -58,5 +58,6 @@ typedef struct
 void app_menu_init(void);
 void app_menu_process(uint8_t key);
 void app_menu_goto_sensor(uint8_t idx);
+uint8_t app_menu_get_sensor_index(void);
 
 #endif

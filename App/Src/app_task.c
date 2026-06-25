@@ -62,7 +62,7 @@ void app_start(void)
             if (ch == 'a') { LED(0); printf("LED ON\r\n"); }
             else if (ch == 'b') { LED(1); printf("LED OFF\r\n"); }
             else if (ch == 'c') { LED_TOGGLE(); printf("LED TOGGLE\r\n"); }
-            else if (ch == 'd') { printf("LED: %s\r\n", HAL_GPIO_ReadPin(LED_GPIO_PORT, LED_GPIO_PIN) ? "OFF" : "ON"); }
+            else if (ch == 'd') { printf("LED:%s,Sensor:%d\r\n", HAL_GPIO_ReadPin(LED_GPIO_PORT, LED_GPIO_PIN) ? "OFF" : "ON", app_menu_get_sensor_index() + 1); }
         }
 
         /* 扫描按键 */
