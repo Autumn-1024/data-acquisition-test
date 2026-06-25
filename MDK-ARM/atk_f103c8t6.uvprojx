@@ -427,16 +427,7 @@
               <FileType>1</FileType>
               <FilePath>..\BSP\Src\bsp_oled.c</FilePath>
             </File>
-            <File>
-              <FileName>bsp_rs485.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\BSP\Src\bsp_rs485.c</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_curtain.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\BSP\Src\bsp_curtain.c</FilePath>
-            </File>
+
 
           </Files>
         </Group>

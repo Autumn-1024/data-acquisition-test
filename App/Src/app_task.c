@@ -2,17 +2,17 @@
  ****************************************************************************************************
  * @file        app_task.c
  * @author      Autumn
- * @version     V2.0
- * @date        2026-06-16
- * @brief       应用层 - 菜单驱动主循环
+ * @version     V3.0
+ * @date        2026-06-25
+ * @brief       应用层 - 主循环
  ****************************************************************************************************
  * @attention
  *
- * 按键映射 (菜单模式):
- *   KEY0(PB10) -> 确认 / 执行
- *   KEY1(PB11) -> 下移 / 减少
- *   KEY2(PA11) -> 上移 / 增加
- *   KEY3(PA12) -> 返回
+ * 按键映射:
+ *   KEY1(PB10) -> 返回
+ *   KEY2(PB11) -> 下移
+ *   KEY3(PA11) -> 上移
+ *   KEY4(PA12) -> 确认
  *
  ****************************************************************************************************
  */
@@ -20,54 +20,54 @@
 #include "app_task.h"
 #include "bsp_key.h"
 #include "bsp_led.h"
-#include "bsp_oled.h"
-#include "bsp_rs485.h"
-#include "bsp_curtain.h"
+#include "bsp_uart.h"
 #include "app_menu.h"
 #include <stdio.h>
 
 /**
  * @brief       应用入口
- * @param       无
- * @retval      无
  */
 void app_start(void)
 {
     uint8_t key;
-    uint8_t i;
-    uint8_t rx_buf[16];
-    uint8_t rx_len;
     uint8_t t = 0;
 
-    /* 初始化菜单 */
+    /* 初始化菜单(含传感器数据) */
     app_menu_init();
 
     while (1)
     {
+        /* 串口命令处理: '1'~'10' 跳转传感器 */
+        if (bsp_uart_rx_ready())
+        {
+            static uint8_t last_ch = 0;
+            uint8_t ch = bsp_uart_read_char();
+
+            if (last_ch == '1' && ch == '0')
+            {
+                app_menu_goto_sensor(9);           /* "10" -> Sensor10 */
+                last_ch = 0;
+            }
+            else if (ch >= '1' && ch <= '9')
+            {
+                app_menu_goto_sensor(ch - '1');    /* '1'->Sensor1 ... '9'->Sensor9 */
+                last_ch = ch;
+            }
+            else
+            {
+                last_ch = ch;
+            }
+        }
+
         /* 扫描按键 */
         key = bsp_key_scan(0);
 
         /* 菜单处理 */
         app_menu_process(key);
 
-        /* 接收RS485数据 */
-        bsp_rs485_receive_data(rx_buf, &rx_len);
-
-        if (rx_len)
-        {
-            if (rx_len > 16) rx_len = 16;
-
-            printf("[RX] RS485 RECV: ");
-            for (i = 0; i < rx_len; i++)
-            {
-                printf("%02X ", rx_buf[i]);
-            }
-            printf("\r\n");
-        }
-
+        /* LED 心跳 */
         t++;
         HAL_Delay(10);
-
         if (t == 50)
         {
             LED_TOGGLE();

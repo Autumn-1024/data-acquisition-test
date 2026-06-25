@@ -23,35 +23,35 @@
 /******************************************************************************************/
 /* 按键引脚定义 */
 
-#define KEY0_GPIO_PORT          GPIOB
-#define KEY0_GPIO_PIN           GPIO_PIN_10
-#define KEY0_GPIO_CLK_ENABLE()  do{ __HAL_RCC_GPIOB_CLK_ENABLE(); }while(0)
-
 #define KEY1_GPIO_PORT          GPIOB
-#define KEY1_GPIO_PIN           GPIO_PIN_11
+#define KEY1_GPIO_PIN           GPIO_PIN_10
 #define KEY1_GPIO_CLK_ENABLE()  do{ __HAL_RCC_GPIOB_CLK_ENABLE(); }while(0)
 
-#define KEY2_GPIO_PORT          GPIOA
+#define KEY2_GPIO_PORT          GPIOB
 #define KEY2_GPIO_PIN           GPIO_PIN_11
-#define KEY2_GPIO_CLK_ENABLE()  do{ __HAL_RCC_GPIOA_CLK_ENABLE(); }while(0)
+#define KEY2_GPIO_CLK_ENABLE()  do{ __HAL_RCC_GPIOB_CLK_ENABLE(); }while(0)
 
 #define KEY3_GPIO_PORT          GPIOA
-#define KEY3_GPIO_PIN           GPIO_PIN_12
-#define KEY3_GPIO_CLK_ENABLE()   do{ __HAL_RCC_GPIOA_CLK_ENABLE(); }while(0)
+#define KEY3_GPIO_PIN           GPIO_PIN_11
+#define KEY3_GPIO_CLK_ENABLE()  do{ __HAL_RCC_GPIOA_CLK_ENABLE(); }while(0)
+
+#define KEY4_GPIO_PORT          GPIOA
+#define KEY4_GPIO_PIN           GPIO_PIN_12
+#define KEY4_GPIO_CLK_ENABLE()   do{ __HAL_RCC_GPIOA_CLK_ENABLE(); }while(0)
 
 /******************************************************************************************/
 /* 按键读取 */
 
-#define KEY0        HAL_GPIO_ReadPin(KEY0_GPIO_PORT, KEY0_GPIO_PIN)
 #define KEY1        HAL_GPIO_ReadPin(KEY1_GPIO_PORT, KEY1_GPIO_PIN)
 #define KEY2        HAL_GPIO_ReadPin(KEY2_GPIO_PORT, KEY2_GPIO_PIN)
 #define KEY3        HAL_GPIO_ReadPin(KEY3_GPIO_PORT, KEY3_GPIO_PIN)
+#define KEY4        HAL_GPIO_ReadPin(KEY4_GPIO_PORT, KEY4_GPIO_PIN)
 
 /* 返回值定义 */
-#define KEY0_PRES   1
-#define KEY1_PRES   2
-#define KEY2_PRES   3
-#define KEY3_PRES   4
+#define KEY1_PRES   1
+#define KEY2_PRES   2
+#define KEY3_PRES   3
+#define KEY4_PRES   4
 
 /******************************************************************************************/
 /* 函数声明 */

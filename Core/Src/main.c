@@ -20,8 +20,6 @@
 #include "bsp_led.h"
 #include "bsp_key.h"
 #include "bsp_oled.h"
-#include "bsp_rs485.h"
-#include "bsp_curtain.h"
 #include "app_task.h"
 
 /**
@@ -71,8 +69,6 @@ int main(void)
     bsp_led_init();
     bsp_key_init();
     oled_init();
-    bsp_rs485_init(9600);
-    bsp_curtain_init();
 
     app_start();    /* 交给应用层 */
 

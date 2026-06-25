@@ -35,5 +35,7 @@
 #define DEBUG_RX_GPIO_CLK_ENABLE()  do{ __HAL_RCC_GPIOA_CLK_ENABLE(); }while(0)
 
 void bsp_uart_init(uint32_t bound);
+uint8_t bsp_uart_rx_ready(void);
+uint8_t bsp_uart_read_char(void);
 
 #endif

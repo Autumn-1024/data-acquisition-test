@@ -19,18 +19,15 @@ void bsp_key_init(void)
 {
     GPIO_InitTypeDef gpio_init_struct;
 
-    KEY0_GPIO_CLK_ENABLE();
     KEY1_GPIO_CLK_ENABLE();
     KEY2_GPIO_CLK_ENABLE();
     KEY3_GPIO_CLK_ENABLE();
+    KEY4_GPIO_CLK_ENABLE();
 
     /* KEY0/1/2/3: 上拉输入，低电平有效 */
     gpio_init_struct.Mode  = GPIO_MODE_INPUT;
     gpio_init_struct.Pull  = GPIO_PULLUP;
     gpio_init_struct.Speed = GPIO_SPEED_FREQ_HIGH;
-
-    gpio_init_struct.Pin = KEY0_GPIO_PIN;
-    HAL_GPIO_Init(KEY0_GPIO_PORT, &gpio_init_struct);
 
     gpio_init_struct.Pin = KEY1_GPIO_PIN;
     HAL_GPIO_Init(KEY1_GPIO_PORT, &gpio_init_struct);
@@ -40,6 +37,9 @@ void bsp_key_init(void)
 
     gpio_init_struct.Pin = KEY3_GPIO_PIN;
     HAL_GPIO_Init(KEY3_GPIO_PORT, &gpio_init_struct);
+
+    gpio_init_struct.Pin = KEY4_GPIO_PIN;
+    HAL_GPIO_Init(KEY4_GPIO_PORT, &gpio_init_struct);
 }
 
 /**
@@ -56,17 +56,17 @@ uint8_t bsp_key_scan(uint8_t mode)
         key_up = 1;
     }
 
-    if (key_up && (KEY0 == 0 || KEY1 == 0 || KEY2 == 0 || KEY3 == 0))
+    if (key_up && (KEY1 == 0 || KEY2 == 0 || KEY3 == 0 || KEY4 == 0))
     {
         HAL_Delay(10);
         key_up = 0;
 
-        if (KEY0 == 0)       return KEY3_PRES;   /* KEY0 -> 确认 */
-        else if (KEY1 == 0)  return KEY2_PRES;   /* KEY1 -> 下移 */
-        else if (KEY2 == 0)  return KEY1_PRES;   /* KEY2 -> 上移 */
-        else if (KEY3 == 0)  return KEY0_PRES;   /* KEY3 -> 返回 */
+        if (KEY1 == 0)       return KEY1_PRES;   /* KEY1 -> 返回 */
+        else if (KEY2 == 0)  return KEY2_PRES;   /* KEY2 -> 下移 */
+        else if (KEY3 == 0)  return KEY3_PRES;   /* KEY3 -> 上移 */
+        else if (KEY4 == 0)  return KEY4_PRES;   /* KEY4 -> 确认 */
     }
-    else if (KEY0 == 1 && KEY1 == 1 && KEY2 == 1 && KEY3 == 1)
+    else if (KEY1 == 1 && KEY2 == 1 && KEY3 == 1 && KEY4 == 1)
     {
         key_up = 1;
     }

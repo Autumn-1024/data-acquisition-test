@@ -23,20 +23,20 @@
         {
             "name": "atk_f103c8t6",
             "includePath": [
-                "c:\\Users\\Autumn\\Desktop\\阜阳幼专采集卡\\采集卡测试程序\\F103-Curtain-Control\\Core\\Inc",
-                "c:\\Users\\Autumn\\Desktop\\阜阳幼专采集卡\\采集卡测试程序\\F103-Curtain-Control\\BSP\\Inc",
-                "c:\\Users\\Autumn\\Desktop\\阜阳幼专采集卡\\采集卡测试程序\\F103-Curtain-Control\\App\\Inc",
-                "c:\\Users\\Autumn\\Desktop\\阜阳幼专采集卡\\采集卡测试程序\\F103-Curtain-Control\\Drivers\\CMSIS\\Include",
-                "c:\\Users\\Autumn\\Desktop\\阜阳幼专采集卡\\采集卡测试程序\\F103-Curtain-Control\\Drivers\\CMSIS\\Device\\ST\\STM32F1xx\\Include",
-                "c:\\Users\\Autumn\\Desktop\\阜阳幼专采集卡\\采集卡测试程序\\F103-Curtain-Control\\Drivers\\STM32F1xx_HAL_Driver\\Inc",
+                "c:\\Users\\Autumn\\Desktop\\阜阳幼专采集卡\\采集卡测试程序\\data-acquisition-test\\Core\\Inc",
+                "c:\\Users\\Autumn\\Desktop\\阜阳幼专采集卡\\采集卡测试程序\\data-acquisition-test\\BSP\\Inc",
+                "c:\\Users\\Autumn\\Desktop\\阜阳幼专采集卡\\采集卡测试程序\\data-acquisition-test\\App\\Inc",
+                "c:\\Users\\Autumn\\Desktop\\阜阳幼专采集卡\\采集卡测试程序\\data-acquisition-test\\Drivers\\CMSIS\\Include",
+                "c:\\Users\\Autumn\\Desktop\\阜阳幼专采集卡\\采集卡测试程序\\data-acquisition-test\\Drivers\\CMSIS\\Device\\ST\\STM32F1xx\\Include",
+                "c:\\Users\\Autumn\\Desktop\\阜阳幼专采集卡\\采集卡测试程序\\data-acquisition-test\\Drivers\\STM32F1xx_HAL_Driver\\Inc",
                 "C:\\Program Files (x86)\\MDK\\core\\ARM\\ARMCC\\include",
                 "C:\\Program Files (x86)\\MDK\\core\\ARM\\ARMCC\\include\\rw",
-                "c:\\Users\\Autumn\\Desktop\\阜阳幼专采集卡\\采集卡测试程序\\F103-Curtain-Control\\Core\\Startup",
-                "c:\\Users\\Autumn\\Desktop\\阜阳幼专采集卡\\采集卡测试程序\\F103-Curtain-Control\\Core\\Src",
-                "c:\\Users\\Autumn\\Desktop\\阜阳幼专采集卡\\采集卡测试程序\\F103-Curtain-Control\\BSP\\Src",
-                "c:\\Users\\Autumn\\Desktop\\阜阳幼专采集卡\\采集卡测试程序\\F103-Curtain-Control\\App\\Src",
-                "c:\\Users\\Autumn\\Desktop\\阜阳幼专采集卡\\采集卡测试程序\\F103-Curtain-Control\\Drivers\\STM32F1xx_HAL_Driver\\Src",
-                "c:\\Users\\Autumn\\Desktop\\阜阳幼专采集卡\\采集卡测试程序\\F103-Curtain-Control"
+                "c:\\Users\\Autumn\\Desktop\\阜阳幼专采集卡\\采集卡测试程序\\data-acquisition-test\\Core\\Startup",
+                "c:\\Users\\Autumn\\Desktop\\阜阳幼专采集卡\\采集卡测试程序\\data-acquisition-test\\Core\\Src",
+                "c:\\Users\\Autumn\\Desktop\\阜阳幼专采集卡\\采集卡测试程序\\data-acquisition-test\\BSP\\Src",
+                "c:\\Users\\Autumn\\Desktop\\阜阳幼专采集卡\\采集卡测试程序\\data-acquisition-test\\App\\Src",
+                "c:\\Users\\Autumn\\Desktop\\阜阳幼专采集卡\\采集卡测试程序\\data-acquisition-test\\Drivers\\STM32F1xx_HAL_Driver\\Src",
+                "c:\\Users\\Autumn\\Desktop\\阜阳幼专采集卡\\采集卡测试程序\\data-acquisition-test"
             ],
             "defines": [
                 "STM32F103xE",

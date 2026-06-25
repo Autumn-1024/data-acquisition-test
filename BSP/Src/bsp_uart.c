@@ -67,3 +67,23 @@ int fgetc(FILE *f)
     HAL_UART_Receive(&g_uart_handle, &ch, 1, HAL_MAX_DELAY);
     return (int)ch;
 }
+
+/**
+ * @brief       检查串口是否有数据可读
+ * @retval      1=有数据, 0=无数据
+ */
+uint8_t bsp_uart_rx_ready(void)
+{
+    return (__HAL_UART_GET_FLAG(&g_uart_handle, UART_FLAG_RXNE) != RESET) ? 1 : 0;
+}
+
+/**
+ * @brief       读取一个字节(非阻塞)
+ * @retval      接收到的字节
+ */
+uint8_t bsp_uart_read_char(void)
+{
+    uint8_t ch = 0;
+    HAL_UART_Receive(&g_uart_handle, &ch, 1, 0);
+    return ch;
+}
