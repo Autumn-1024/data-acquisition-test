@@ -30,7 +30,6 @@
 void app_start(void)
 {
     uint8_t key;
-    uint8_t t = 0;
 
     /* 初始化菜单(含传感器数据) */
     app_menu_init();
@@ -71,13 +70,6 @@ void app_start(void)
         /* 菜单处理 */
         app_menu_process(key);
 
-        /* LED 心跳 */
-        t++;
         HAL_Delay(10);
-        if (t == 50)
-        {
-            LED_TOGGLE();
-            t = 0;
-        }
     }
 }
