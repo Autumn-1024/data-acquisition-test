@@ -355,6 +355,8 @@ void app_menu_process(uint8_t key)
             sensor_simulate(cur_index);
             /* 记录历史 */
             sensor_record_history(cur_index);
+            /* 串口发送数据: 传感器序号@数据值 */
+            printf("%d@%.1f\r\n", cur_index + 1, g_sensors[cur_index].cur_value);
             /* 标记需要刷新 */
             need_refresh = 1;
         }
