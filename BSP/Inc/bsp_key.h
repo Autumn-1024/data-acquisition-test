@@ -9,7 +9,7 @@
  * @attention
  *
  * 平台: STM32F103C8T6
- * 按键: KEY0=PA4, KEY1=PA5, KEY2=PA6, KEY_UP=PA7
+ * 按键: KEY0=PB10, KEY1=PB11, KEY2=PA11, KEY3=PA12
  * 有效电平: KEY0/1/2 低电平有效, KEY_UP 高电平有效
  *
  ****************************************************************************************************
@@ -23,20 +23,20 @@
 /******************************************************************************************/
 /* 按键引脚定义 */
 
-#define KEY0_GPIO_PORT          GPIOA
-#define KEY0_GPIO_PIN           GPIO_PIN_4
-#define KEY0_GPIO_CLK_ENABLE()  do{ __HAL_RCC_GPIOA_CLK_ENABLE(); }while(0)
+#define KEY0_GPIO_PORT          GPIOB
+#define KEY0_GPIO_PIN           GPIO_PIN_10
+#define KEY0_GPIO_CLK_ENABLE()  do{ __HAL_RCC_GPIOB_CLK_ENABLE(); }while(0)
 
-#define KEY1_GPIO_PORT          GPIOA
-#define KEY1_GPIO_PIN           GPIO_PIN_5
-#define KEY1_GPIO_CLK_ENABLE()  do{ __HAL_RCC_GPIOA_CLK_ENABLE(); }while(0)
+#define KEY1_GPIO_PORT          GPIOB
+#define KEY1_GPIO_PIN           GPIO_PIN_11
+#define KEY1_GPIO_CLK_ENABLE()  do{ __HAL_RCC_GPIOB_CLK_ENABLE(); }while(0)
 
 #define KEY2_GPIO_PORT          GPIOA
-#define KEY2_GPIO_PIN           GPIO_PIN_6
+#define KEY2_GPIO_PIN           GPIO_PIN_11
 #define KEY2_GPIO_CLK_ENABLE()  do{ __HAL_RCC_GPIOA_CLK_ENABLE(); }while(0)
 
 #define KEY3_GPIO_PORT          GPIOA
-#define KEY3_GPIO_PIN           GPIO_PIN_7
+#define KEY3_GPIO_PIN           GPIO_PIN_12
 #define KEY3_GPIO_CLK_ENABLE()   do{ __HAL_RCC_GPIOA_CLK_ENABLE(); }while(0)
 
 /******************************************************************************************/

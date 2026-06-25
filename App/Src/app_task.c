@@ -9,10 +9,10 @@
  * @attention
  *
  * 按键映射 (菜单模式):
- *   KEY0(PA4)  -> 返回
- *   KEY1(PA5)  -> 下移 / 减少
- *   KEY2(PA6)  -> 上移 / 增加
- *   KEY_UP(PA7)-> 确认 / 执行
+ *   KEY0(PB10) -> 确认 / 执行
+ *   KEY1(PB11) -> 下移 / 减少
+ *   KEY2(PA11) -> 上移 / 增加
+ *   KEY3(PA12) -> 返回
  *
  ****************************************************************************************************
  */
@@ -24,7 +24,6 @@
 #include "bsp_rs485.h"
 #include "bsp_curtain.h"
 #include "app_menu.h"
-#include "app_web.h"
 #include <stdio.h>
 
 /**
@@ -65,9 +64,6 @@ void app_start(void)
             }
             printf("\r\n");
         }
-
-        /* Web服务器轮询 */
-        app_web_process();
 
         t++;
         HAL_Delay(10);

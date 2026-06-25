@@ -61,10 +61,10 @@ uint8_t bsp_key_scan(uint8_t mode)
         HAL_Delay(10);
         key_up = 0;
 
-        if (KEY0 == 0)       return KEY0_PRES;
-        else if (KEY1 == 0)  return KEY1_PRES;
-        else if (KEY2 == 0)  return KEY2_PRES;
-        else if (KEY3 == 0)  return KEY3_PRES;
+        if (KEY0 == 0)       return KEY3_PRES;   /* KEY0 -> 确认 */
+        else if (KEY1 == 0)  return KEY2_PRES;   /* KEY1 -> 下移 */
+        else if (KEY2 == 0)  return KEY1_PRES;   /* KEY2 -> 上移 */
+        else if (KEY3 == 0)  return KEY0_PRES;   /* KEY3 -> 返回 */
     }
     else if (KEY0 == 1 && KEY1 == 1 && KEY2 == 1 && KEY3 == 1)
     {

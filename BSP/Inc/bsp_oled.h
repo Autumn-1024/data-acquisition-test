@@ -10,8 +10,8 @@
  *
  * 平台: STM32F103C8T6
  * 接线:
- *   PB6 -> OLED_SCL
- *   PB7 -> OLED_SDA
+ *   PB8 -> OLED_SCL
+ *   PB9 -> OLED_SDA
  *
  ****************************************************************************************************
  */
@@ -25,11 +25,11 @@
 /* OLED IIC引脚定义 */
 
 #define OLED_SCL_PORT           GPIOB
-#define OLED_SCL_PIN            GPIO_PIN_6
+#define OLED_SCL_PIN            GPIO_PIN_8
 #define OLED_SCL_CLK_ENABLE()   do{ __HAL_RCC_GPIOB_CLK_ENABLE(); }while(0)
 
 #define OLED_SDA_PORT           GPIOB
-#define OLED_SDA_PIN            GPIO_PIN_7
+#define OLED_SDA_PIN            GPIO_PIN_9
 #define OLED_SDA_CLK_ENABLE()   do{ __HAL_RCC_GPIOB_CLK_ENABLE(); }while(0)
 
 /******************************************************************************************/

@@ -22,9 +22,7 @@
 #include "bsp_oled.h"
 #include "bsp_rs485.h"
 #include "bsp_curtain.h"
-#include "bsp_esp01s.h"
 #include "app_task.h"
-#include "app_web.h"
 
 /**
  * @brief       系统时钟配置 (HSE 8MHz -> 72MHz)
@@ -75,8 +73,6 @@ int main(void)
     oled_init();
     bsp_rs485_init(9600);
     bsp_curtain_init();
-
-    app_web_init();
 
     app_start();    /* 交给应用层 */
 

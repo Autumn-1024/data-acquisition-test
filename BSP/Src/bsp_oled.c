@@ -9,7 +9,7 @@
  * @attention
  *
  * 平台: STM32F103C8T6
- * 接线: PB6(SCL), PB7(SDA)
+ * 接线: PB8(SCL), PB9(SDA)
  * SSD1306 IIC地址: 0x78
  *
  ****************************************************************************************************
@@ -416,5 +416,5 @@ void oled_init(void)
 
     oled_clear();
 
-    printf("[OLED] Init done (PB6=SCL, PB7=SDA, Addr=0x78)\r\n");
+    printf("[OLED] Init done (PB8=SCL, PB9=SDA, Addr=0x78)\r\n");
 }
