@@ -36,20 +36,21 @@ void app_start(void)
 
     while (1)
     {
-        /* 串口命令处理: '1'~'10' 跳转传感器 */
+        /* 串口命令处理: '1'~'14' 跳转传感器 */
         if (bsp_uart_rx_ready())
         {
             static uint8_t last_ch = 0;
             uint8_t ch = bsp_uart_read_char();
 
-            if (last_ch == '1' && ch == '0')
+            /* 两位数解析: last_ch='1' + ch='0'~'4' -> Sensor 10~14 */
+            if (last_ch == '1' && ch >= '0' && ch <= '4')
             {
-                app_menu_goto_sensor(9);           /* "10" -> Sensor10 */
+                app_menu_goto_sensor(9 + (ch - '0'));   /* "10"~"14" -> Sensor10~14 */
                 last_ch = 0;
             }
             else if (ch >= '1' && ch <= '9')
             {
-                app_menu_goto_sensor(ch - '1');    /* '1'->Sensor1 ... '9'->Sensor9 */
+                app_menu_goto_sensor(ch - '1');          /* '1'->Sensor1 ... '9'->Sensor9 */
                 last_ch = ch;
             }
             else

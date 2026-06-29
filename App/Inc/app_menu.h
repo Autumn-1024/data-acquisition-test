@@ -22,7 +22,7 @@
 /******************************************************************************************/
 /* 配置 */
 
-#define SENSOR_COUNT        10          /* 传感器数量 */
+#define SENSOR_COUNT        14          /* 传感器数量 */
 #define SENSOR_NAME_LEN     12          /* 传感器名称最大长度 */
 #define CHART_WIDTH         128         /* 折线图宽度(像素) = 屏幕宽度 */
 #define CHART_HEIGHT        32          /* 折线图高度(像素) */

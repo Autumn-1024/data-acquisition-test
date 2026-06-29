@@ -427,8 +427,6 @@
               <FileType>1</FileType>
               <FilePath>..\BSP\Src\bsp_oled.c</FilePath>
             </File>
-
-
           </Files>
         </Group>
         <Group>
@@ -444,7 +442,6 @@
               <FileType>1</FileType>
               <FilePath>..\App\Src\app_menu.c</FilePath>
             </File>
-
           </Files>
         </Group>
         <Group>
