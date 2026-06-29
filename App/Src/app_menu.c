@@ -27,6 +27,7 @@
 #include "bsp_sensor_eddy.h"
 #include "bsp_sensor_ds18b20.h"
 #include "bsp_sensor_linear_hall.h"
+#include "bsp_sensor_piezo.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -119,6 +120,11 @@ static void sensor_simulate(uint8_t idx)
     else if (idx == 7)
     {
         new_val = bsp_linear_hall_read();
+    }
+    /* 9号压电式振动传感器: 读取真实电压 */
+    else if (idx == 8)
+    {
+        new_val = bsp_piezo_read();
     }
     /* 12号超声波传感器: 读取真实数据 */
     else if (idx == 11)
@@ -397,6 +403,7 @@ void app_menu_init(void)
     bsp_eddy_init();           /* 初始化6号涡流式传感器 */
     bsp_ds18b20_init();        /* 初始化7号DS18B20温度传感器 */
     bsp_linear_hall_init();   /* 初始化8号线性霍尔传感器 */
+    bsp_piezo_init();          /* 初始化9号压电式振动传感器 */
     bsp_ultrasonic_init();    /* 初始化12号超声波传感器 */
     cur_page = PAGE_WELCOME;
     cur_index = 0;
