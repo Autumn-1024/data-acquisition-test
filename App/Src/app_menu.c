@@ -22,6 +22,7 @@
 #include "bsp_sensor_resistive.h"
 #include "bsp_sensor_hall.h"
 #include "bsp_sensor_capacitive.h"
+#include "bsp_sensor_inductive.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -85,6 +86,11 @@ static void sensor_simulate(uint8_t idx)
     else if (idx == 2)
     {
         new_val = bsp_capacitive_read();
+    }
+    /* 4号电感式传感器: 读取真实状态 */
+    else if (idx == 3)
+    {
+        new_val = bsp_inductive_read();
     }
     /* 12号超声波传感器: 读取真实数据 */
     else if (idx == 11)
@@ -358,6 +364,7 @@ void app_menu_init(void)
     bsp_resistive_init();     /* 初始化1号电阻式传感器 */
     bsp_hall_init();           /* 初始化2号霍尔传感器 */
     bsp_capacitive_init();    /* 初始化3号电容式传感器 */
+    bsp_inductive_init();     /* 初始化4号电感式传感器 */
     bsp_ultrasonic_init();    /* 初始化12号超声波传感器 */
     cur_page = PAGE_WELCOME;
     cur_index = 0;

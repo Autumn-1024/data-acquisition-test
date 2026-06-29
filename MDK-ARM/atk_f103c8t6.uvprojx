@@ -447,6 +447,11 @@
               <FileType>1</FileType>
               <FilePath>..\BSP\Src\bsp_sensor_capacitive.c</FilePath>
             </File>
+            <File>
+              <FileName>bsp_sensor_inductive.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\Src\bsp_sensor_inductive.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
