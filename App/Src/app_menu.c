@@ -18,6 +18,7 @@
 #include "app_menu.h"
 #include "bsp_key.h"
 #include "bsp_oled.h"
+#include "bsp_sensor_ultrasonic.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -65,12 +66,29 @@ static void sensor_data_init(void)
  */
 static void sensor_simulate(uint8_t idx)
 {
-    float delta;
     float new_val;
 
-    /* 随机偏移 -1.0 ~ +1.0 */
-    delta = ((float)(rand() % 201) - 100.0f) / 100.0f;
-    new_val = g_sensors[idx].cur_value + delta;
+    /* 12号超声波传感器: 读取真实数据 */
+    if (idx == 11)
+    {
+        float dist = bsp_ultrasonic_read();
+        if (dist >= 0.0f && dist <= 300.0f)
+        {
+            new_val = dist;
+        }
+        else
+        {
+            /* 读取失败: -1=超时(无ECHO), -2=超出范围 */
+            new_val = 0.0f;
+        }
+    }
+    else
+    {
+        /* 其他传感器: 模拟数据 */
+        float delta;
+        delta = ((float)(rand() % 201) - 100.0f) / 100.0f;
+        new_val = g_sensors[idx].cur_value + delta;
+    }
 
     /* 钳位 */
     if (new_val < SENSOR_VAL_MIN) new_val = SENSOR_VAL_MIN;
@@ -319,6 +337,7 @@ static void handle_sensor_detail(uint8_t key)
 void app_menu_init(void)
 {
     sensor_data_init();
+    bsp_ultrasonic_init();    /* 初始化超声波传感器 */
     cur_page = PAGE_WELCOME;
     cur_index = 0;
     need_refresh = 1;

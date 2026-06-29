@@ -427,6 +427,11 @@
               <FileType>1</FileType>
               <FilePath>..\BSP\Src\bsp_oled.c</FilePath>
             </File>
+            <File>
+              <FileName>bsp_sensor_ultrasonic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\Src\bsp_sensor_ultrasonic.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -496,6 +501,16 @@
               <FileName>stm32f1xx_hal_uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f1xx_hal_tim.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f1xx_hal_tim_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim_ex.c</FilePath>
             </File>
           </Files>
         </Group>
