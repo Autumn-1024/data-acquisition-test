@@ -15,6 +15,7 @@ extern "C" {
 #define HAL_DMA_MODULE_ENABLED
 #define HAL_UART_MODULE_ENABLED
 #define HAL_TIM_MODULE_ENABLED
+#define HAL_ADC_MODULE_ENABLED
 
 /* 振荡器参数 */
 #if !defined (HSE_VALUE)
@@ -75,6 +76,9 @@ extern "C" {
 #endif
 #ifdef HAL_TIM_MODULE_ENABLED
   #include "stm32f1xx_hal_tim.h"
+#endif
+#ifdef HAL_ADC_MODULE_ENABLED
+  #include "stm32f1xx_hal_adc.h"
 #endif
 
 #ifdef __cplusplus

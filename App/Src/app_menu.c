@@ -19,6 +19,7 @@
 #include "bsp_key.h"
 #include "bsp_oled.h"
 #include "bsp_sensor_ultrasonic.h"
+#include "bsp_sensor_resistive.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -68,8 +69,13 @@ static void sensor_simulate(uint8_t idx)
 {
     float new_val;
 
+    /* 1号电阻式传感器: 读取真实电压 */
+    if (idx == 0)
+    {
+        new_val = bsp_resistive_read();
+    }
     /* 12号超声波传感器: 读取真实数据 */
-    if (idx == 11)
+    else if (idx == 11)
     {
         float dist = bsp_ultrasonic_read();
         if (dist >= 0.0f && dist <= 300.0f)
@@ -337,7 +343,8 @@ static void handle_sensor_detail(uint8_t key)
 void app_menu_init(void)
 {
     sensor_data_init();
-    bsp_ultrasonic_init();    /* 初始化超声波传感器 */
+    bsp_resistive_init();     /* 初始化1号电阻式传感器 */
+    bsp_ultrasonic_init();    /* 初始化12号超声波传感器 */
     cur_page = PAGE_WELCOME;
     cur_index = 0;
     need_refresh = 1;
