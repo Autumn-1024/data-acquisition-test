@@ -482,6 +482,21 @@
               <FileType>1</FileType>
               <FilePath>..\BSP\Src\bsp_sensor_pressure.c</FilePath>
             </File>
+            <File>
+              <FileName>bsp_sensor_fiber.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\Src\bsp_sensor_fiber.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_sensor_alcohol.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\Src\bsp_sensor_alcohol.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_sensor_soil.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\Src\bsp_sensor_soil.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

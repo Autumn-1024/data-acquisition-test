@@ -29,6 +29,9 @@
 #include "bsp_sensor_linear_hall.h"
 #include "bsp_sensor_piezo.h"
 #include "bsp_sensor_pressure.h"
+#include "bsp_sensor_fiber.h"
+#include "bsp_sensor_alcohol.h"
+#include "bsp_sensor_soil.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -131,6 +134,21 @@ static void sensor_simulate(uint8_t idx)
     else if (idx == 9)
     {
         new_val = bsp_pressure_read();
+    }
+    /* 11号光纤传感器: 读取真实状态 */
+    else if (idx == 10)
+    {
+        new_val = bsp_fiber_read();
+    }
+    /* 13号气敏传感器: 读取真实 ADC 值 */
+    else if (idx == 12)
+    {
+        new_val = bsp_alcohol_read();
+    }
+    /* 14号湿度传感器: 读取真实湿度 */
+    else if (idx == 13)
+    {
+        new_val = bsp_soil_read();
     }
     /* 12号超声波传感器: 读取真实数据 */
     else if (idx == 11)
@@ -411,7 +429,10 @@ void app_menu_init(void)
     bsp_linear_hall_init();   /* 初始化8号线性霍尔传感器 */
     bsp_piezo_init();          /* 初始化9号压电式振动传感器 */
     bsp_pressure_init();       /* 初始化10号压力传感器 */
+    bsp_fiber_init();           /* 初始化11号光纤传感器 */
     bsp_ultrasonic_init();    /* 初始化12号超声波传感器 */
+    bsp_alcohol_init();        /* 初始化13号气敏传感器 */
+    bsp_soil_init();            /* 初始化14号湿度传感器 */
     cur_page = PAGE_WELCOME;
     cur_index = 0;
     need_refresh = 1;
