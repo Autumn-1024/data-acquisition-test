@@ -457,6 +457,11 @@
               <FileType>1</FileType>
               <FilePath>..\BSP\Src\bsp_sensor_photoelec.c</FilePath>
             </File>
+            <File>
+              <FileName>bsp_sensor_eddy.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\Src\bsp_sensor_eddy.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
