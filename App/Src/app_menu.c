@@ -25,6 +25,7 @@
 #include "bsp_sensor_inductive.h"
 #include "bsp_sensor_photoelec.h"
 #include "bsp_sensor_eddy.h"
+#include "bsp_sensor_ds18b20.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -103,6 +104,15 @@ static void sensor_simulate(uint8_t idx)
     else if (idx == 5)
     {
         new_val = bsp_eddy_read();
+    }
+    /* 7号DS18B20温度传感器: 读取真实温度 */
+    else if (idx == 6)
+    {
+        float temp = bsp_ds18b20_read();
+        if (temp > -900.0f)
+            new_val = temp;
+        else
+            new_val = g_sensors[idx].cur_value; /* 读取失败保持上次值 */
     }
     /* 12号超声波传感器: 读取真实数据 */
     else if (idx == 11)
@@ -379,6 +389,7 @@ void app_menu_init(void)
     bsp_inductive_init();     /* 初始化4号电感式传感器 */
     bsp_photoelec_init();     /* 初始化5号光电式传感器 */
     bsp_eddy_init();           /* 初始化6号涡流式传感器 */
+    bsp_ds18b20_init();        /* 初始化7号DS18B20温度传感器 */
     bsp_ultrasonic_init();    /* 初始化12号超声波传感器 */
     cur_page = PAGE_WELCOME;
     cur_index = 0;
