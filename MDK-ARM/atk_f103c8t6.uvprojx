@@ -442,6 +442,11 @@
               <FileType>1</FileType>
               <FilePath>..\BSP\Src\bsp_sensor_hall.c</FilePath>
             </File>
+            <File>
+              <FileName>bsp_sensor_capacitive.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\Src\bsp_sensor_capacitive.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
