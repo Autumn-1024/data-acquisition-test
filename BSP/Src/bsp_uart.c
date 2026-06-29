@@ -10,7 +10,13 @@
 
 #include "bsp_uart.h"
 
-static UART_HandleTypeDef g_uart_handle;
+UART_HandleTypeDef g_uart_handle;
+
+/* 环形缓冲区 */
+#define RX_BUF_SIZE     64
+static uint8_t rx_buf[RX_BUF_SIZE];
+static volatile uint16_t rx_head = 0;  /* 写入位置 (中断) */
+static volatile uint16_t rx_tail = 0;  /* 读取位置 (主循环) */
 
 /**
  * @brief       USART1初始化
@@ -47,6 +53,36 @@ void bsp_uart_init(uint32_t bound)
     g_uart_handle.Init.HwFlowCtl    = UART_HWCONTROL_NONE;
     g_uart_handle.Init.Mode         = UART_MODE_TX_RX;
     HAL_UART_Init(&g_uart_handle);
+
+    /* 启动中断接收 */
+    HAL_NVIC_SetPriority(USART1_IRQn, 3, 3);
+    HAL_NVIC_EnableIRQ(USART1_IRQn);
+    HAL_UART_Receive_IT(&g_uart_handle, &rx_buf[0], 1);
+}
+
+/**
+ * @brief       UART接收中断回调
+ */
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+    if (huart->Instance == USART1)
+    {
+        uint16_t next = (rx_head + 1) % RX_BUF_SIZE;
+        if (next != rx_tail)
+        {
+            rx_head = next;
+        }
+        /* 继续接收下一个字节 */
+        HAL_UART_Receive_IT(&g_uart_handle, &rx_buf[rx_head], 1);
+    }
+}
+
+/**
+ * @brief       USART1中断服务函数
+ */
+void USART1_IRQHandler(void)
+{
+    HAL_UART_IRQHandler(&g_uart_handle);
 }
 
 /**
@@ -74,7 +110,7 @@ int fgetc(FILE *f)
  */
 uint8_t bsp_uart_rx_ready(void)
 {
-    return (__HAL_UART_GET_FLAG(&g_uart_handle, UART_FLAG_RXNE) != RESET) ? 1 : 0;
+    return (rx_head != rx_tail) ? 1 : 0;
 }
 
 /**
@@ -84,6 +120,27 @@ uint8_t bsp_uart_rx_ready(void)
 uint8_t bsp_uart_read_char(void)
 {
     uint8_t ch = 0;
-    HAL_UART_Receive(&g_uart_handle, &ch, 1, 0);
+    if (rx_head != rx_tail)
+    {
+        ch = rx_buf[rx_tail];
+        rx_tail = (rx_tail + 1) % RX_BUF_SIZE;
+    }
     return ch;
+}
+
+/**
+ * @brief       读取缓冲区中的所有可用字节
+ * @param       buf:    输出缓冲区
+ * @param       max_len: 最大读取长度
+ * @retval      实际读取的字节数
+ */
+uint16_t bsp_uart_read_buf(uint8_t *buf, uint16_t max_len)
+{
+    uint16_t len = 0;
+    while (rx_head != rx_tail && len < max_len)
+    {
+        buf[len++] = rx_buf[rx_tail];
+        rx_tail = (rx_tail + 1) % RX_BUF_SIZE;
+    }
+    return len;
 }

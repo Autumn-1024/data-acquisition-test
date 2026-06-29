@@ -34,8 +34,11 @@
 #define DEBUG_RX_GPIO_PIN           GPIO_PIN_10
 #define DEBUG_RX_GPIO_CLK_ENABLE()  do{ __HAL_RCC_GPIOA_CLK_ENABLE(); }while(0)
 
+extern UART_HandleTypeDef g_uart_handle;
+
 void bsp_uart_init(uint32_t bound);
 uint8_t bsp_uart_rx_ready(void);
 uint8_t bsp_uart_read_char(void);
+uint16_t bsp_uart_read_buf(uint8_t *buf, uint16_t max_len);
 
 #endif

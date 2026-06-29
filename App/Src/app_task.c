@@ -36,33 +36,36 @@ void app_start(void)
 
     while (1)
     {
-        /* 串口命令处理: '1'~'14' 跳转传感器 */
+        /* 串口命令处理: 从缓冲区读取，分析是单位数还是两位数 */
         if (bsp_uart_rx_ready())
         {
-            static uint8_t last_ch = 0;
-            uint8_t ch = bsp_uart_read_char();
+            uint8_t buf[4] = {0};
+            uint16_t len = bsp_uart_read_buf(buf, sizeof(buf));
+            uint16_t i = 0;
 
-            /* 两位数解析: last_ch='1' + ch='0'~'4' -> Sensor 10~14 */
-            if (last_ch == '1' && ch >= '0' && ch <= '4')
+            while (i < len)
             {
-                app_menu_goto_sensor(9 + (ch - '0'));   /* "10"~"14" -> Sensor10~14 */
-                last_ch = 0;
-            }
-            else if (ch >= '1' && ch <= '9')
-            {
-                app_menu_goto_sensor(ch - '1');          /* '1'->Sensor1 ... '9'->Sensor9 */
-                last_ch = ch;
-            }
-            else
-            {
-                last_ch = ch;
-            }
+                uint8_t ch = buf[i];
 
-            /* LED控制命令 */
-            if (ch == 'a') { LED(0); printf("LED ON\r\n"); }
-            else if (ch == 'b') { LED(1); printf("LED OFF\r\n"); }
-            else if (ch == 'c') { LED_TOGGLE(); printf("LED TOGGLE\r\n"); }
-            else if (ch == 'd') { printf("LED:%s,Sensor:%d\r\n", HAL_GPIO_ReadPin(LED_GPIO_PORT, LED_GPIO_PIN) ? "OFF" : "ON", app_menu_get_sensor_index() + 1); }
+                /* 两位数: "10"~"14" -> Sensor 10~14 */
+                if (ch == '1' && (i + 1) < len && buf[i + 1] >= '0' && buf[i + 1] <= '4')
+                {
+                    app_menu_goto_sensor(9 + (buf[i + 1] - '0'));
+                    i += 2;
+                }
+                /* 单位数: '1'~'9' -> Sensor 1~9 */
+                else if (ch >= '1' && ch <= '9')
+                {
+                    app_menu_goto_sensor(ch - '1');
+                    i++;
+                }
+                /* LED控制命令 */
+                else if (ch == 'a') { LED(0); printf("LED ON\r\n"); i++; }
+                else if (ch == 'b') { LED(1); printf("LED OFF\r\n"); i++; }
+                else if (ch == 'c') { LED_TOGGLE(); printf("LED TOGGLE\r\n"); i++; }
+                else if (ch == 'd') { printf("LED:%s,Sensor:%d\r\n", HAL_GPIO_ReadPin(LED_GPIO_PORT, LED_GPIO_PIN) ? "OFF" : "ON", app_menu_get_sensor_index() + 1); i++; }
+                else { i++; }
+            }
         }
 
         /* 扫描按键 */
